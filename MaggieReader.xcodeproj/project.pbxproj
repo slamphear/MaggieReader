@@ -7,14 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A3A627882C058A8E00494C5F /* readerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627872C058A8E00494C5F /* readerApp.swift */; };
+		A3A627882C058A8E00494C5F /* MaggieReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627872C058A8E00494C5F /* MaggieReaderApp.swift */; };
 		A3A6278A2C058A8E00494C5F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627892C058A8E00494C5F /* ContentView.swift */; };
-		A3A6278C2C058A8E00494C5F /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6278B2C058A8E00494C5F /* Item.swift */; };
 		A3A6278E2C058A8F00494C5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3A6278D2C058A8F00494C5F /* Assets.xcassets */; };
 		A3A627922C058A8F00494C5F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3A627912C058A8F00494C5F /* Preview Assets.xcassets */; };
-		A3A6279C2C058A8F00494C5F /* readerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6279B2C058A8F00494C5F /* readerTests.swift */; };
-		A3A627A62C058A8F00494C5F /* readerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627A52C058A8F00494C5F /* readerUITests.swift */; };
-		A3A627A82C058A8F00494C5F /* readerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627A72C058A8F00494C5F /* readerUITestsLaunchTests.swift */; };
+		A3A6279C2C058A8F00494C5F /* MaggieReaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A6279B2C058A8F00494C5F /* MaggieReaderTests.swift */; };
+		A3A627A62C058A8F00494C5F /* MaggieReaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627A52C058A8F00494C5F /* MaggieReaderUITests.swift */; };
+		A3A627A82C058A8F00494C5F /* MaggieReaderUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627A72C058A8F00494C5F /* MaggieReaderUITestsLaunchTests.swift */; };
+		A3A627B92C058CC700494C5F /* SwiftyDropbox in Frameworks */ = {isa = PBXBuildFile; productRef = A3A627B82C058CC700494C5F /* SwiftyDropbox */; };
+		A3A627BB2C058D1A00494C5F /* MediaPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627BA2C058D1A00494C5F /* MediaPlayerView.swift */; };
+		A3A627C12C058DF600494C5F /* TextToSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627C02C058DF600494C5F /* TextToSpeech.swift */; };
+		A3A627C42C058EB000494C5F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = A3A627C32C058EB000494C5F /* SwiftKeychainWrapper */; };
+		A3A627C62C05903C00494C5F /* OpenAIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627C52C05903C00494C5F /* OpenAIClient.swift */; };
+		A3A627C92C0592F600494C5F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = A3A627C82C0592F600494C5F /* OpenAI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,18 +40,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A3A627842C058A8E00494C5F /* reader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = reader.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3A627872C058A8E00494C5F /* readerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readerApp.swift; sourceTree = "<group>"; };
+		A3A627842C058A8E00494C5F /* MaggieReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaggieReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A627872C058A8E00494C5F /* MaggieReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaggieReaderApp.swift; sourceTree = "<group>"; };
 		A3A627892C058A8E00494C5F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		A3A6278B2C058A8E00494C5F /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		A3A6278D2C058A8F00494C5F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		A3A6278F2C058A8F00494C5F /* reader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = reader.entitlements; sourceTree = "<group>"; };
+		A3A6278F2C058A8F00494C5F /* MaggieReader.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MaggieReader.entitlements; sourceTree = "<group>"; };
 		A3A627912C058A8F00494C5F /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		A3A627972C058A8F00494C5F /* readerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = readerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3A6279B2C058A8F00494C5F /* readerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readerTests.swift; sourceTree = "<group>"; };
-		A3A627A12C058A8F00494C5F /* readerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = readerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A3A627A52C058A8F00494C5F /* readerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readerUITests.swift; sourceTree = "<group>"; };
-		A3A627A72C058A8F00494C5F /* readerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = readerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A3A627972C058A8F00494C5F /* MaggieReaderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaggieReaderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A6279B2C058A8F00494C5F /* MaggieReaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaggieReaderTests.swift; sourceTree = "<group>"; };
+		A3A627A12C058A8F00494C5F /* MaggieReaderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MaggieReaderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3A627A52C058A8F00494C5F /* MaggieReaderUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaggieReaderUITests.swift; sourceTree = "<group>"; };
+		A3A627A72C058A8F00494C5F /* MaggieReaderUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaggieReaderUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A3A627BA2C058D1A00494C5F /* MediaPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaPlayerView.swift; sourceTree = "<group>"; };
+		A3A627C02C058DF600494C5F /* TextToSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeech.swift; sourceTree = "<group>"; };
+		A3A627C52C05903C00494C5F /* OpenAIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIClient.swift; sourceTree = "<group>"; };
+		A3A627CA2C06274900494C5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +62,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3A627B92C058CC700494C5F /* SwiftyDropbox in Frameworks */,
+				A3A627C92C0592F600494C5F /* OpenAI in Frameworks */,
+				A3A627C42C058EB000494C5F /* SwiftKeychainWrapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -77,9 +88,9 @@
 		A3A6277B2C058A8E00494C5F = {
 			isa = PBXGroup;
 			children = (
-				A3A627862C058A8E00494C5F /* reader */,
-				A3A6279A2C058A8F00494C5F /* readerTests */,
-				A3A627A42C058A8F00494C5F /* readerUITests */,
+				A3A627862C058A8E00494C5F /* MaggieReader */,
+				A3A6279A2C058A8F00494C5F /* MaggieReaderTests */,
+				A3A627A42C058A8F00494C5F /* MaggieReaderUITests */,
 				A3A627852C058A8E00494C5F /* Products */,
 			);
 			sourceTree = "<group>";
@@ -87,24 +98,25 @@
 		A3A627852C058A8E00494C5F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				A3A627842C058A8E00494C5F /* reader.app */,
-				A3A627972C058A8F00494C5F /* readerTests.xctest */,
-				A3A627A12C058A8F00494C5F /* readerUITests.xctest */,
+				A3A627842C058A8E00494C5F /* MaggieReader.app */,
+				A3A627972C058A8F00494C5F /* MaggieReaderTests.xctest */,
+				A3A627A12C058A8F00494C5F /* MaggieReaderUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		A3A627862C058A8E00494C5F /* reader */ = {
+		A3A627862C058A8E00494C5F /* MaggieReader */ = {
 			isa = PBXGroup;
 			children = (
-				A3A627872C058A8E00494C5F /* readerApp.swift */,
-				A3A627892C058A8E00494C5F /* ContentView.swift */,
-				A3A6278B2C058A8E00494C5F /* Item.swift */,
+				A3A627CA2C06274900494C5F /* Info.plist */,
+				A3A627BF2C058DD900494C5F /* Core */,
+				A3A627BC2C058D3F00494C5F /* Views */,
+				A3A627872C058A8E00494C5F /* MaggieReaderApp.swift */,
 				A3A6278D2C058A8F00494C5F /* Assets.xcassets */,
-				A3A6278F2C058A8F00494C5F /* reader.entitlements */,
+				A3A6278F2C058A8F00494C5F /* MaggieReader.entitlements */,
 				A3A627902C058A8F00494C5F /* Preview Content */,
 			);
-			path = reader;
+			path = MaggieReader;
 			sourceTree = "<group>";
 		};
 		A3A627902C058A8F00494C5F /* Preview Content */ = {
@@ -115,29 +127,47 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		A3A6279A2C058A8F00494C5F /* readerTests */ = {
+		A3A6279A2C058A8F00494C5F /* MaggieReaderTests */ = {
 			isa = PBXGroup;
 			children = (
-				A3A6279B2C058A8F00494C5F /* readerTests.swift */,
+				A3A6279B2C058A8F00494C5F /* MaggieReaderTests.swift */,
 			);
-			path = readerTests;
+			path = MaggieReaderTests;
 			sourceTree = "<group>";
 		};
-		A3A627A42C058A8F00494C5F /* readerUITests */ = {
+		A3A627A42C058A8F00494C5F /* MaggieReaderUITests */ = {
 			isa = PBXGroup;
 			children = (
-				A3A627A52C058A8F00494C5F /* readerUITests.swift */,
-				A3A627A72C058A8F00494C5F /* readerUITestsLaunchTests.swift */,
+				A3A627A52C058A8F00494C5F /* MaggieReaderUITests.swift */,
+				A3A627A72C058A8F00494C5F /* MaggieReaderUITestsLaunchTests.swift */,
 			);
-			path = readerUITests;
+			path = MaggieReaderUITests;
+			sourceTree = "<group>";
+		};
+		A3A627BC2C058D3F00494C5F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A3A627892C058A8E00494C5F /* ContentView.swift */,
+				A3A627BA2C058D1A00494C5F /* MediaPlayerView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A3A627BF2C058DD900494C5F /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A3A627C02C058DF600494C5F /* TextToSpeech.swift */,
+				A3A627C52C05903C00494C5F /* OpenAIClient.swift */,
+			);
+			path = Core;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A3A627832C058A8E00494C5F /* reader */ = {
+		A3A627832C058A8E00494C5F /* MaggieReader */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A3A627AB2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "reader" */;
+			buildConfigurationList = A3A627AB2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "MaggieReader" */;
 			buildPhases = (
 				A3A627802C058A8E00494C5F /* Sources */,
 				A3A627812C058A8E00494C5F /* Frameworks */,
@@ -147,14 +177,19 @@
 			);
 			dependencies = (
 			);
-			name = reader;
+			name = MaggieReader;
+			packageProductDependencies = (
+				A3A627B82C058CC700494C5F /* SwiftyDropbox */,
+				A3A627C32C058EB000494C5F /* SwiftKeychainWrapper */,
+				A3A627C82C0592F600494C5F /* OpenAI */,
+			);
 			productName = reader;
-			productReference = A3A627842C058A8E00494C5F /* reader.app */;
+			productReference = A3A627842C058A8E00494C5F /* MaggieReader.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A3A627962C058A8F00494C5F /* readerTests */ = {
+		A3A627962C058A8F00494C5F /* MaggieReaderTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A3A627AE2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "readerTests" */;
+			buildConfigurationList = A3A627AE2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "MaggieReaderTests" */;
 			buildPhases = (
 				A3A627932C058A8F00494C5F /* Sources */,
 				A3A627942C058A8F00494C5F /* Frameworks */,
@@ -165,14 +200,14 @@
 			dependencies = (
 				A3A627992C058A8F00494C5F /* PBXTargetDependency */,
 			);
-			name = readerTests;
+			name = MaggieReaderTests;
 			productName = readerTests;
-			productReference = A3A627972C058A8F00494C5F /* readerTests.xctest */;
+			productReference = A3A627972C058A8F00494C5F /* MaggieReaderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		A3A627A02C058A8F00494C5F /* readerUITests */ = {
+		A3A627A02C058A8F00494C5F /* MaggieReaderUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A3A627B12C058A8F00494C5F /* Build configuration list for PBXNativeTarget "readerUITests" */;
+			buildConfigurationList = A3A627B12C058A8F00494C5F /* Build configuration list for PBXNativeTarget "MaggieReaderUITests" */;
 			buildPhases = (
 				A3A6279D2C058A8F00494C5F /* Sources */,
 				A3A6279E2C058A8F00494C5F /* Frameworks */,
@@ -183,9 +218,9 @@
 			dependencies = (
 				A3A627A32C058A8F00494C5F /* PBXTargetDependency */,
 			);
-			name = readerUITests;
+			name = MaggieReaderUITests;
 			productName = readerUITests;
-			productReference = A3A627A12C058A8F00494C5F /* readerUITests.xctest */;
+			productReference = A3A627A12C058A8F00494C5F /* MaggieReaderUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -211,7 +246,7 @@
 					};
 				};
 			};
-			buildConfigurationList = A3A6277F2C058A8E00494C5F /* Build configuration list for PBXProject "reader" */;
+			buildConfigurationList = A3A6277F2C058A8E00494C5F /* Build configuration list for PBXProject "MaggieReader" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -220,13 +255,18 @@
 				Base,
 			);
 			mainGroup = A3A6277B2C058A8E00494C5F;
+			packageReferences = (
+				A3A627B72C058CC700494C5F /* XCRemoteSwiftPackageReference "SwiftyDropbox" */,
+				A3A627C22C058EB000494C5F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */,
+				A3A627C72C0592F600494C5F /* XCRemoteSwiftPackageReference "OpenAI" */,
+			);
 			productRefGroup = A3A627852C058A8E00494C5F /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A3A627832C058A8E00494C5F /* reader */,
-				A3A627962C058A8F00494C5F /* readerTests */,
-				A3A627A02C058A8F00494C5F /* readerUITests */,
+				A3A627832C058A8E00494C5F /* MaggieReader */,
+				A3A627962C058A8F00494C5F /* MaggieReaderTests */,
+				A3A627A02C058A8F00494C5F /* MaggieReaderUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -262,9 +302,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3A627BB2C058D1A00494C5F /* MediaPlayerView.swift in Sources */,
+				A3A627C12C058DF600494C5F /* TextToSpeech.swift in Sources */,
 				A3A6278A2C058A8E00494C5F /* ContentView.swift in Sources */,
-				A3A6278C2C058A8E00494C5F /* Item.swift in Sources */,
-				A3A627882C058A8E00494C5F /* readerApp.swift in Sources */,
+				A3A627882C058A8E00494C5F /* MaggieReaderApp.swift in Sources */,
+				A3A627C62C05903C00494C5F /* OpenAIClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +314,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3A6279C2C058A8F00494C5F /* readerTests.swift in Sources */,
+				A3A6279C2C058A8F00494C5F /* MaggieReaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,8 +322,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A3A627A62C058A8F00494C5F /* readerUITests.swift in Sources */,
-				A3A627A82C058A8F00494C5F /* readerUITestsLaunchTests.swift in Sources */,
+				A3A627A62C058A8F00494C5F /* MaggieReaderUITests.swift in Sources */,
+				A3A627A82C058A8F00494C5F /* MaggieReaderUITestsLaunchTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -290,12 +332,12 @@
 /* Begin PBXTargetDependency section */
 		A3A627992C058A8F00494C5F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A3A627832C058A8E00494C5F /* reader */;
+			target = A3A627832C058A8E00494C5F /* MaggieReader */;
 			targetProxy = A3A627982C058A8F00494C5F /* PBXContainerItemProxy */;
 		};
 		A3A627A32C058A8F00494C5F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A3A627832C058A8E00494C5F /* reader */;
+			target = A3A627832C058A8E00494C5F /* MaggieReader */;
 			targetProxy = A3A627A22C058A8F00494C5F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -420,14 +462,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = reader/reader.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MaggieReader/MaggieReader.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"reader/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MaggieReader/Preview Content\"";
 				DEVELOPMENT_TEAM = B83GKBSQDR;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MaggieReader/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -438,12 +482,12 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlamphear.reader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlamphear.MaggieReader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -458,14 +502,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = reader/reader.entitlements;
+				CODE_SIGN_ENTITLEMENTS = MaggieReader/MaggieReader.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"reader/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"MaggieReader/Preview Content\"";
 				DEVELOPMENT_TEAM = B83GKBSQDR;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MaggieReader/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -476,12 +522,12 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlamphear.reader;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stevenlamphear.MaggieReader;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -510,7 +556,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/reader.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/reader";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MaggieReader.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MaggieReader";
 			};
 			name = Debug;
 		};
@@ -533,7 +579,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/reader.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/reader";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MaggieReader.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MaggieReader";
 			};
 			name = Release;
 		};
@@ -584,7 +630,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A3A6277F2C058A8E00494C5F /* Build configuration list for PBXProject "reader" */ = {
+		A3A6277F2C058A8E00494C5F /* Build configuration list for PBXProject "MaggieReader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A3A627A92C058A8F00494C5F /* Debug */,
@@ -593,7 +639,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A3A627AB2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "reader" */ = {
+		A3A627AB2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "MaggieReader" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A3A627AC2C058A8F00494C5F /* Debug */,
@@ -602,7 +648,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A3A627AE2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "readerTests" */ = {
+		A3A627AE2C058A8F00494C5F /* Build configuration list for PBXNativeTarget "MaggieReaderTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A3A627AF2C058A8F00494C5F /* Debug */,
@@ -611,7 +657,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A3A627B12C058A8F00494C5F /* Build configuration list for PBXNativeTarget "readerUITests" */ = {
+		A3A627B12C058A8F00494C5F /* Build configuration list for PBXNativeTarget "MaggieReaderUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				A3A627B22C058A8F00494C5F /* Debug */,
@@ -621,6 +667,51 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A3A627B72C058CC700494C5F /* XCRemoteSwiftPackageReference "SwiftyDropbox" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/dropbox/SwiftyDropbox.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.0.7;
+			};
+		};
+		A3A627C22C058EB000494C5F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/jrendel/SwiftKeychainWrapper.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.1;
+			};
+		};
+		A3A627C72C0592F600494C5F /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.9;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A3A627B82C058CC700494C5F /* SwiftyDropbox */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3A627B72C058CC700494C5F /* XCRemoteSwiftPackageReference "SwiftyDropbox" */;
+			productName = SwiftyDropbox;
+		};
+		A3A627C32C058EB000494C5F /* SwiftKeychainWrapper */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3A627C22C058EB000494C5F /* XCRemoteSwiftPackageReference "SwiftKeychainWrapper" */;
+			productName = SwiftKeychainWrapper;
+		};
+		A3A627C82C0592F600494C5F /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A3A627C72C0592F600494C5F /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A3A6277C2C058A8E00494C5F /* Project object */;
 }

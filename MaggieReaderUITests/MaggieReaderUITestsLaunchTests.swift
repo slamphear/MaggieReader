@@ -1,13 +1,13 @@
 //
-//  readerUITestsLaunchTests.swift
-//  readerUITests
+//  MaggieReaderUITestsLaunchTests.swift
+//  MaggieReaderUITests
 //
 //  Created by Steven Lamphear on 5/27/24.
 //
 
 import XCTest
 
-final class readerUITestsLaunchTests: XCTestCase {
+final class MaggieReaderUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
