@@ -11,22 +11,27 @@ import MediaPlayer
 import OpenAI
 
 struct MediaPlayerView: View {
-    @Binding var audioURLs: [URL]
-    @Binding var inputText: String
-    @Binding var selectedVoice: AudioSpeechQuery.AudioSpeechVoice
+    let inputText: String
+    let audioURLs: [URL]
     @State private var player: AVQueuePlayer?
     @State private var isLoading: Bool = false
     @State private var timeObserverToken: Any?
     @State private var timeControlStatusObserver: NSKeyValueObservation?
     @State private var isPlaying: Bool = false
+    @State private var currentTime: Double = 0
+    @State private var duration: Double = 0
 
     var body: some View {
         ZStack {
             VStack {
                 if let player = player {
                     VStack {
-                        Text("Now Playing")
-                            .font(.title)
+                        ScrollView {
+                            Text(inputText)
+                                .padding()
+                        }
+
+                        Slider(value: $currentTime, in: 0...duration, onEditingChanged: sliderEditingChanged)
                             .padding()
 
                         HStack {
@@ -70,17 +75,6 @@ struct MediaPlayerView: View {
                             }
                         }
                         .padding()
-
-                        Picker("Voice", selection: $selectedVoice) {
-                            ForEach(AudioSpeechQuery.AudioSpeechVoice.allCases, id: \.self) { voice in
-                                Text(voice.rawValue.capitalized).tag(voice)
-                            }
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding()
-                        .onChange(of: selectedVoice) { oldVoice, newVoice in
-                            switchVoice(to: newVoice)
-                        }
                     }
                 } else {
                     Text("Loading...")
@@ -101,6 +95,9 @@ struct MediaPlayerView: View {
             }
         }
         .onDisappear {
+            if let player = player {
+                player.pause()
+            }
             if let timeObserverToken = timeObserverToken {
                 player?.removeTimeObserver(timeObserverToken)
                 self.timeObserverToken = nil
@@ -111,7 +108,7 @@ struct MediaPlayerView: View {
 
     func setupPlayer() {
         if !audioURLs.isEmpty {
-            let firstItem = AVPlayerItem(url: audioURLs.removeFirst())
+            let firstItem = AVPlayerItem(url: audioURLs[0])
             player = AVQueuePlayer(playerItem: firstItem)
             player?.play()
             setupNowPlaying()
@@ -119,24 +116,13 @@ struct MediaPlayerView: View {
             observePlayerStatus()
 
             // Add remaining items to the player
-            for url in audioURLs {
+            for url in audioURLs.dropFirst() {
                 let item = AVPlayerItem(url: url)
                 player?.insert(item, after: nil)
             }
-        }
-    }
 
-    func switchVoice(to newVoice: AudioSpeechQuery.AudioSpeechVoice) {
-        isLoading = true
-        // Stop and dispose of the previous player
-        player?.pause()
-        player?.removeAllItems()
-
-        convertLargeTextToSpeech(text: inputText, voice: newVoice) { urls in
-            DispatchQueue.main.async {
-                self.audioURLs = urls
-                setupPlayer()
-                self.isLoading = false
+            if let duration = player?.currentItem?.asset.duration.seconds {
+                self.duration = duration
             }
         }
     }
@@ -221,7 +207,8 @@ struct MediaPlayerView: View {
 
         let timeScale = CMTimeScale(NSEC_PER_SEC)
         let time = CMTime(seconds: 1.0, preferredTimescale: timeScale)
-        timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { _ in
+        timeObserverToken = player.addPeriodicTimeObserver(forInterval: time, queue: .main) { time in
+            self.currentTime = time.seconds
             self.updateNowPlayingInfo()
         }
     }
@@ -231,6 +218,12 @@ struct MediaPlayerView: View {
             DispatchQueue.main.async {
                 self.isPlaying = player.timeControlStatus == .playing
             }
+        }
+    }
+
+    func sliderEditingChanged(editingStarted: Bool) {
+        if !editingStarted {
+            player?.seek(to: CMTime(seconds: currentTime, preferredTimescale: 1))
         }
     }
 }

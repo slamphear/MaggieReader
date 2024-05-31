@@ -75,17 +75,27 @@ func saveAudioFile(data: Data, voice: String) -> URL? {
     }
 }
 
-func convertLargeTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, completion: @escaping ([URL]) -> Void) {
-    let chunkSize = 4000
+func convertLargeTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, openAI: OpenAI, completion: @escaping ([URL]) -> Void) {
+    let chunkSize = 4000  // or any appropriate chunk size
     let textChunks = chunkText(text, chunkSize: chunkSize)
     var audioURLs: [URL] = []
     let dispatchGroup = DispatchGroup()
 
     for chunk in textChunks {
         dispatchGroup.enter()
-        convertTextToSpeech(text: chunk, voice: voice) { url in
-            if let url = url {
-                audioURLs.append(url)
+        let query = AudioSpeechQuery(model: .tts_1_hd, input: chunk, voice: voice, responseFormat: .mp3, speed: 1.0)
+        openAI.audioCreateSpeech(query: query) { result in
+            switch result {
+            case .success(let audio):
+                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp3")
+                do {
+                    try audio.audio.write(to: tempURL)
+                    audioURLs.append(tempURL)
+                } catch {
+                    print("Error writing audio to file: \(error)")
+                }
+            case .failure(let error):
+                print("Error creating speech: \(error)")
             }
             dispatchGroup.leave()
         }

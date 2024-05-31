@@ -20,6 +20,9 @@
 		A3A627C42C058EB000494C5F /* SwiftKeychainWrapper in Frameworks */ = {isa = PBXBuildFile; productRef = A3A627C32C058EB000494C5F /* SwiftKeychainWrapper */; };
 		A3A627C62C05903C00494C5F /* OpenAIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627C52C05903C00494C5F /* OpenAIClient.swift */; };
 		A3A627C92C0592F600494C5F /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = A3A627C82C0592F600494C5F /* OpenAI */; };
+		A3A627CC2C06A01C00494C5F /* NewEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627CB2C06A01C00494C5F /* NewEntryView.swift */; };
+		A3A627CE2C06EFD200494C5F /* APIKeyEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627CD2C06EFD200494C5F /* APIKeyEntryView.swift */; };
+		A3A627D02C06EFE500494C5F /* DocumentListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627CF2C06EFE500494C5F /* DocumentListView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +58,9 @@
 		A3A627C02C058DF600494C5F /* TextToSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextToSpeech.swift; sourceTree = "<group>"; };
 		A3A627C52C05903C00494C5F /* OpenAIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIClient.swift; sourceTree = "<group>"; };
 		A3A627CA2C06274900494C5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		A3A627CB2C06A01C00494C5F /* NewEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewEntryView.swift; sourceTree = "<group>"; };
+		A3A627CD2C06EFD200494C5F /* APIKeyEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIKeyEntryView.swift; sourceTree = "<group>"; };
+		A3A627CF2C06EFE500494C5F /* DocumentListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +155,9 @@
 			children = (
 				A3A627892C058A8E00494C5F /* ContentView.swift */,
 				A3A627BA2C058D1A00494C5F /* MediaPlayerView.swift */,
+				A3A627CB2C06A01C00494C5F /* NewEntryView.swift */,
+				A3A627CD2C06EFD200494C5F /* APIKeyEntryView.swift */,
+				A3A627CF2C06EFE500494C5F /* DocumentListView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -302,11 +311,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A3A627CE2C06EFD200494C5F /* APIKeyEntryView.swift in Sources */,
+				A3A627CC2C06A01C00494C5F /* NewEntryView.swift in Sources */,
 				A3A627BB2C058D1A00494C5F /* MediaPlayerView.swift in Sources */,
 				A3A627C12C058DF600494C5F /* TextToSpeech.swift in Sources */,
 				A3A6278A2C058A8E00494C5F /* ContentView.swift in Sources */,
 				A3A627882C058A8E00494C5F /* MaggieReaderApp.swift in Sources */,
 				A3A627C62C05903C00494C5F /* OpenAIClient.swift in Sources */,
+				A3A627D02C06EFE500494C5F /* DocumentListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

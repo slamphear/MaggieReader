@@ -5,8 +5,9 @@
 //  Created by Steven Lamphear on 5/27/24.
 //
 
-import OpenAI
+import Foundation
 import SwiftKeychainWrapper
+import OpenAI
 
 // Function to securely store the OpenAI API token
 func saveAPIToken(token: String) {
