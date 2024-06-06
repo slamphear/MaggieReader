@@ -72,24 +72,26 @@ func convertTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice,
         }
     }
 
-    // Sort audioURLs by chunk index to ensure they are in the correct order
-    audioURLs.sort { $0.0 < $1.0 }
-    let sortedURLs = audioURLs.map { $0.1 }
-    let outputURL = documentsDirectory.appendingPathComponent("\(uniqueID).m4a")
-    async stitchAudioFiles(audioURLs: sortedURLs, outputURL: outputURL) { success in
-        if success {
-            for (_, url) in audioURLs {
-                try? FileManager.default.removeItem(at: url)
+    dispatchGroup.notify(queue: .main) {
+        // Sort audioURLs by chunk index to ensure they are in the correct order
+        audioURLs.sort { $0.0 < $1.0 }
+        let sortedURLs = audioURLs.map { $0.1 }
+        let outputURL = documentsDirectory.appendingPathComponent("\(uniqueID).m4a")
+        stitchAudioFiles(audioURLs: sortedURLs, outputURL: outputURL) { success in
+            if success {
+                for (_, url) in audioURLs {
+                    try? FileManager.default.removeItem(at: url)
+                }
+                completion(outputURL)
+            } else {
+                print("Error stitching audio files")
+                completion(nil)
             }
-            completion(outputURL)
-        } else {
-            print("Error stitching audio files")
-            completion(nil)
         }
     }
 }
 
-func stitchAudioFiles(audioURLs: [URL], outputURL: URL, completion: @escaping (Bool) -> Void) async {
+func stitchAudioFiles(audioURLs: [URL], outputURL: URL, completion: @escaping (Bool) -> Void) {
     let composition = AVMutableComposition()
     let track = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
 
@@ -97,13 +99,12 @@ func stitchAudioFiles(audioURLs: [URL], outputURL: URL, completion: @escaping (B
 
     for (index, url) in audioURLs.enumerated() {
         let asset = AVAsset(url: url)
+        guard let assetTrack = asset.tracks(withMediaType: .audio).first else { continue }
+        let timeRange = CMTimeRange(start: .zero, duration: asset.duration)
         do {
-            guard let assetTrack = try await asset.loadTracks(withMediaType: .audio).first else { continue }
-            let duration = try await asset.load(.duration)
-            let timeRange = CMTimeRange(start: .zero, duration: duration)
             try track?.insertTimeRange(timeRange, of: assetTrack, at: insertTime)
-            insertTime = CMTimeAdd(insertTime, duration)
-            print("Inserted chunk \(index) with duration \(duration) at time \(insertTime.seconds)")
+            insertTime = CMTimeAdd(insertTime, asset.duration)
+            print("Inserted chunk \(index) at time \(insertTime.seconds)")
         } catch {
             print("Error inserting time range: \(error)")
             completion(false)
