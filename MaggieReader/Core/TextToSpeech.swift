@@ -5,7 +5,7 @@
 //  Created by Steven Lamphear on 5/27/24.
 //
 
-import Foundation
+import AVFoundation
 import SwiftKeychainWrapper
 import OpenAI
 
@@ -16,10 +16,10 @@ func chunkText(_ text: String, chunkSize: Int) -> [String] {
     while startIndex < text.endIndex {
         var endIndex = text.index(startIndex, offsetBy: chunkSize, limitedBy: text.endIndex) ?? text.endIndex
 
-        // Ensure we don't split words
+        // Ensure we don't split sentences
         if endIndex < text.endIndex {
-            if let spaceIndex = text[..<endIndex].lastIndex(of: " ") {
-                endIndex = spaceIndex
+            if let periodIndex = text[..<endIndex].lastIndex(of: ".") {
+                endIndex = text.index(after: periodIndex)
             }
         }
 
@@ -31,66 +31,37 @@ func chunkText(_ text: String, chunkSize: Int) -> [String] {
             break
         }
 
-        startIndex = text.index(after: endIndex)
+        startIndex = endIndex
     }
 
     return chunks
 }
 
 func convertTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, completion: @escaping (URL?) -> Void) {
+    let chunkSize = 4000  // or any appropriate chunk size
+    let textChunks = chunkText(text, chunkSize: chunkSize)
+    let uniqueID = UUID().uuidString
+    let tempDirectory = FileManager.default.temporaryDirectory
+    let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    var audioURLs: [(Int, URL)] = []  // Tuple to store chunk index and URL
+    let dispatchGroup = DispatchGroup()
+
     guard let openAI = getOpenAIClient() else {
         completion(nil)
         return
     }
 
-    let query = AudioSpeechQuery(
-        model: .tts_1_hd,
-        input: text,
-        voice: voice,
-        responseFormat: .mp3,
-        speed: 1.0
-    )
-
-    openAI.audioCreateSpeech(query: query) { result in
-        switch result {
-        case .success(let response):
-            let data = response.audio
-            let fileURL = saveAudioFile(data: data, voice: voice.rawValue)
-            completion(fileURL)
-        case .failure(let error):
-            print("Error: \(error)")
-            completion(nil)
-        }
-    }
-}
-
-func saveAudioFile(data: Data, voice: String) -> URL? {
-    let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("\(voice)_output.mp3")
-    do {
-        try data.write(to: fileURL)
-        return fileURL
-    } catch {
-        print("Error saving audio file: \(error)")
-        return nil
-    }
-}
-
-func convertLargeTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, openAI: OpenAI, completion: @escaping ([URL]) -> Void) {
-    let chunkSize = 4000  // or any appropriate chunk size
-    let textChunks = chunkText(text, chunkSize: chunkSize)
-    var audioURLs: [URL] = []
-    let dispatchGroup = DispatchGroup()
-
-    for chunk in textChunks {
+    for (index, chunk) in textChunks.enumerated() {
         dispatchGroup.enter()
-        let query = AudioSpeechQuery(model: .tts_1_hd, input: chunk, voice: voice, responseFormat: .mp3, speed: 1.0)
+        let query = AudioSpeechQuery(model: .tts_1_hd, input: chunk, voice: voice, responseFormat: .aac, speed: 1.0)
         openAI.audioCreateSpeech(query: query) { result in
             switch result {
             case .success(let audio):
-                let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp3")
+                let tempURL = tempDirectory.appendingPathComponent("\(uniqueID)_chunk_\(index).aac")
                 do {
                     try audio.audio.write(to: tempURL)
-                    audioURLs.append(tempURL)
+                    audioURLs.append((index, tempURL))
+                    print("Chunk \(index) length: \(audio.audio.count) bytes")
                 } catch {
                     print("Error writing audio to file: \(error)")
                 }
@@ -101,7 +72,59 @@ func convertLargeTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechV
         }
     }
 
-    dispatchGroup.notify(queue: .main) {
-        completion(audioURLs)
+    // Sort audioURLs by chunk index to ensure they are in the correct order
+    audioURLs.sort { $0.0 < $1.0 }
+    let sortedURLs = audioURLs.map { $0.1 }
+    let outputURL = documentsDirectory.appendingPathComponent("\(uniqueID).m4a")
+    async stitchAudioFiles(audioURLs: sortedURLs, outputURL: outputURL) { success in
+        if success {
+            for (_, url) in audioURLs {
+                try? FileManager.default.removeItem(at: url)
+            }
+            completion(outputURL)
+        } else {
+            print("Error stitching audio files")
+            completion(nil)
+        }
+    }
+}
+
+func stitchAudioFiles(audioURLs: [URL], outputURL: URL, completion: @escaping (Bool) -> Void) async {
+    let composition = AVMutableComposition()
+    let track = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
+
+    var insertTime = CMTime.zero
+
+    for (index, url) in audioURLs.enumerated() {
+        let asset = AVAsset(url: url)
+        do {
+            guard let assetTrack = try await asset.loadTracks(withMediaType: .audio).first else { continue }
+            let duration = try await asset.load(.duration)
+            let timeRange = CMTimeRange(start: .zero, duration: duration)
+            try track?.insertTimeRange(timeRange, of: assetTrack, at: insertTime)
+            insertTime = CMTimeAdd(insertTime, duration)
+            print("Inserted chunk \(index) with duration \(duration) at time \(insertTime.seconds)")
+        } catch {
+            print("Error inserting time range: \(error)")
+            completion(false)
+            return
+        }
+    }
+
+    guard let exportSession = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A) else {
+        completion(false)
+        return
+    }
+
+    exportSession.outputURL = outputURL
+    exportSession.outputFileType = .m4a
+    exportSession.exportAsynchronously {
+        if exportSession.status == .completed {
+            print("Stitched audio file successfully")
+            completion(true)
+        } else {
+            print("Error exporting stitched audio file: \(exportSession.error?.localizedDescription ?? "unknown error")")
+            completion(false)
+        }
     }
 }

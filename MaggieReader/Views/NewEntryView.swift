@@ -15,7 +15,7 @@ struct NewEntryView: View {
     @State private var selectedVoice: AudioSpeechQuery.AudioSpeechVoice = .fable
     @State private var isLoading: Bool = false
     @State private var isMediaPlayerActive: Bool = false
-    @State private var audioURLs: [URL] = []
+    @State private var audioURL: URL?
 
     var body: some View {
         NavigationView {
@@ -31,8 +31,10 @@ struct NewEntryView: View {
                     }
                     .padding()
 
-                    Button("Clear all") {
+                    Button(action: {
                         inputText = ""
+                    }) {
+                        Text("Clear all")
                     }
                     .padding()
                 }
@@ -47,35 +49,46 @@ struct NewEntryView: View {
 
                 Spacer()
 
-                Button("Convert to Speech") {
+                Button(action: {
                     UIApplication.shared.endEditing(true)
                     isLoading = true
                     guard let openAI = getOpenAIClient() else {
                         print("API Token not found")
                         return
                     }
-                    convertLargeTextToSpeech(text: inputText, voice: selectedVoice, openAI: openAI) { urls in
+                    convertTextToSpeech(text: inputText, voice: selectedVoice) { url in
                         DispatchQueue.main.async {
-                            self.audioURLs = urls
+                            guard let url = url else {
+                                self.isLoading = false
+                                print("Failed to convert text to speech.")
+                                return
+                            }
+                            self.audioURL = url
                             self.isLoading = false
                             self.isMediaPlayerActive = true
-                            saveEntry()
+                            saveEntry(text: inputText, url: url)
                             self.items.append(inputText)
                             UserDefaults.standard.set(self.items, forKey: "savedItems")
                         }
                     }
+                }) {
+                    Text("Convert to Speech")
                 }
                 .padding()
 
                 Spacer()
 
-                NavigationLink(destination: MediaPlayerView(inputText: inputText, audioURLs: audioURLs), isActive: $isMediaPlayerActive) {
-                    EmptyView()
+                if let audioURL = audioURL {
+                    NavigationLink(destination: MediaPlayerView(inputText: inputText, audioURLs: [audioURL]), isActive: $isMediaPlayerActive) {
+                        EmptyView()
+                    }
                 }
             }
             .navigationTitle("New Entry")
-            .navigationBarItems(trailing: Button("Cancel") {
+            .navigationBarItems(trailing: Button(action: {
                 isPresentingNewEntryView = false
+            }) {
+                Text("Cancel")
             })
         }
 
@@ -98,12 +111,6 @@ struct NewEntryView: View {
             print("No string content in the clipboard")
         }
         #endif
-    }
-
-    func saveEntry() {
-        if let data = try? JSONEncoder().encode(audioURLs) {
-            UserDefaults.standard.set(data, forKey: inputText)
-        }
     }
 }
 

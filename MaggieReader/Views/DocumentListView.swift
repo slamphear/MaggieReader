@@ -61,8 +61,9 @@ struct DocumentListView: View {
 
     func getAudioURLs(for item: String) -> [URL] {
         if let data = UserDefaults.standard.data(forKey: item),
-           let urls = try? JSONDecoder().decode([URL].self, from: data) {
-            return urls
+           let fileNames = try? JSONDecoder().decode([String].self, from: data) {
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            return fileNames.map { documentsDirectory.appendingPathComponent($0) }
         }
         return []
     }
@@ -70,6 +71,11 @@ struct DocumentListView: View {
     func deleteItems(at offsets: IndexSet) {
         for index in offsets {
             let item = items[index]
+            // Delete audio files
+            let urls = getAudioURLs(for: item)
+            for url in urls {
+                try? FileManager.default.removeItem(at: url)
+            }
             UserDefaults.standard.removeObject(forKey: item)
         }
         items.remove(atOffsets: offsets)
