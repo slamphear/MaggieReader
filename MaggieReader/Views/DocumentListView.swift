@@ -25,6 +25,7 @@ struct DocumentListView: View {
                 .onDelete(perform: deleteItems)
             }
             .navigationTitle("Maggie Reader")
+            #if canImport(UIKit)
             .navigationBarItems(
                 leading: HStack {
                     EditButton()
@@ -40,6 +41,17 @@ struct DocumentListView: View {
                     Image(systemName: "plus")
                 }
             )
+            #else
+            .toolbar {
+                ToolbarItem(placement: .automatic) {
+                    Button(action: {
+                        isPresentingNewEntryView = true
+                    }) {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            #endif
             .sheet(isPresented: $isPresentingNewEntryView) {
                 NewEntryView(items: $items, isPresentingNewEntryView: $isPresentingNewEntryView)
             }

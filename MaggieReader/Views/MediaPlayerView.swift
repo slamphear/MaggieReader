@@ -16,6 +16,7 @@ struct MediaPlayerView: View {
     @State private var player: AVQueuePlayer = AVQueuePlayer()
     @State private var isPlaying: Bool = false
     @State private var currentItemIndex: Int = 0
+    @State private var duration: CMTime = .zero
 
     var body: some View {
         VStack {
@@ -57,6 +58,7 @@ struct MediaPlayerView: View {
         }
     }
 
+    @MainActor
     func setupPlayer() {
         player.removeAllItems()
         for url in audioURLs {
@@ -74,7 +76,14 @@ struct MediaPlayerView: View {
         }
         player.play()
         isPlaying = true
-        updateNowPlaying(isPlaying: true)
+        if let currentItem = player.currentItem {
+            Task {
+                let duration = try await currentItem.asset.load(.duration)
+                print("Duration of completed file: \(CMTimeGetSeconds(duration)) seconds")
+                self.duration = duration
+                updateNowPlaying(isPlaying: true)
+            }
+        }
     }
 
     func togglePlayPause() {
@@ -162,19 +171,17 @@ struct MediaPlayerView: View {
         var nowPlayingInfo = [String: Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = "Maggie Reader"
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = CMTimeGetSeconds(self.duration)
 
         // Add App Icon as artwork
+        #if canImport(UIKit)
         if let appIcon = UIImage(named: "AppIcon") {
             let artwork = MPMediaItemArtwork(boundsSize: appIcon.size) { size in
                 return appIcon
             }
             nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
         }
-
-        // Add duration
-        if let currentItem = player.currentItem {
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = CMTimeGetSeconds(currentItem.asset.duration)
-        }
+        #endif
 
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
@@ -183,11 +190,7 @@ struct MediaPlayerView: View {
         var nowPlayingInfo = MPNowPlayingInfoCenter.default().nowPlayingInfo ?? [String: Any]()
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime().seconds
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
-
-        // Add duration
-        if let currentItem = player.currentItem {
-            nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = CMTimeGetSeconds(currentItem.asset.duration)
-        }
+        nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = CMTimeGetSeconds(self.duration)
 
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }

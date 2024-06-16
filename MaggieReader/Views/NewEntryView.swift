@@ -26,10 +26,12 @@ struct NewEntryView: View {
                     .frame(height: 200)
 
                 HStack {
+                    #if canImport(UIKit)
                     Button(action: pasteFromClipboard) {
                         Text("Paste from Clipboard")
                     }
                     .padding()
+                    #endif
 
                     Button(action: {
                         inputText = ""
@@ -50,7 +52,9 @@ struct NewEntryView: View {
                 Spacer()
 
                 Button(action: {
+                    #if canImport(UIKit)
                     UIApplication.shared.endEditing(true)
+                    #endif
                     isLoading = true
                     guard let openAI = getOpenAIClient() else {
                         print("API Token not found")
@@ -85,11 +89,13 @@ struct NewEntryView: View {
                 }
             }
             .navigationTitle("New Entry")
+            #if canImport(UIKit)
             .navigationBarItems(trailing: Button(action: {
                 isPresentingNewEntryView = false
             }) {
                 Text("Cancel")
             })
+            #endif
         }
 
         if isLoading {
@@ -97,7 +103,9 @@ struct NewEntryView: View {
                 Color.black.opacity(0.5).edgesIgnoringSafeArea(.all)
                 ProgressView("Converting...")
                     .padding()
+                    #if canImport(UIKit)
                     .background(Color(.systemBackground))
+                    #endif
                     .cornerRadius(10)
             }
         }

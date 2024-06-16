@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A36FD1F22C0A129800A74FA0 /* AudioFileHandling.swift in Sources */ = {isa = PBXBuildFile; fileRef = A36FD1F12C0A129800A74FA0 /* AudioFileHandling.swift */; };
-		A36FD1F42C0A1E3D00A74FA0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A36FD1F32C0A1E3D00A74FA0 /* LaunchScreen.storyboard */; };
 		A3A627882C058A8E00494C5F /* MaggieReaderApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627872C058A8E00494C5F /* MaggieReaderApp.swift */; };
 		A3A6278A2C058A8E00494C5F /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A627892C058A8E00494C5F /* ContentView.swift */; };
 		A3A6278E2C058A8F00494C5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A3A6278D2C058A8F00494C5F /* Assets.xcassets */; };
@@ -46,7 +45,6 @@
 
 /* Begin PBXFileReference section */
 		A36FD1F12C0A129800A74FA0 /* AudioFileHandling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioFileHandling.swift; sourceTree = "<group>"; };
-		A36FD1F32C0A1E3D00A74FA0 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A3A627842C058A8E00494C5F /* MaggieReader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MaggieReader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A3A627872C058A8E00494C5F /* MaggieReaderApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MaggieReaderApp.swift; sourceTree = "<group>"; };
 		A3A627892C058A8E00494C5F /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -98,7 +96,6 @@
 		A36FD1F52C0A1E7F00A74FA0 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				A36FD1F32C0A1E3D00A74FA0 /* LaunchScreen.storyboard */,
 				A3A627CA2C06274900494C5F /* Info.plist */,
 			);
 			path = "Supporting Files";
@@ -299,7 +296,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A36FD1F42C0A1E3D00A74FA0 /* LaunchScreen.storyboard in Resources */,
 				A3A627922C058A8F00494C5F /* Preview Assets.xcassets in Resources */,
 				A3A6278E2C058A8F00494C5F /* Assets.xcassets in Resources */,
 			);
@@ -508,7 +504,6 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -551,7 +546,6 @@
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
