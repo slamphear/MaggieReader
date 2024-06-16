@@ -15,7 +15,7 @@ struct NewEntryView: View {
     @State private var selectedVoice: AudioSpeechQuery.AudioSpeechVoice = .fable
     @State private var isLoading: Bool = false
     @State private var isMediaPlayerActive: Bool = false
-    @State private var audioURL: URL?
+    @State private var audioURLs: [URL] = []
 
     var body: some View {
         NavigationView {
@@ -58,19 +58,19 @@ struct NewEntryView: View {
                     isLoading = true
                     guard let openAI = getOpenAIClient() else {
                         print("API Token not found")
+                        isLoading = false
                         return
                     }
-                    convertTextToSpeech(text: inputText, voice: selectedVoice) { url in
+                    convertTextToSpeech(text: inputText, voice: selectedVoice) { urls in
                         DispatchQueue.main.async {
-                            guard let url = url else {
-                                self.isLoading = false
+                            self.isLoading = false
+                            if urls.isEmpty {
                                 print("Failed to convert text to speech.")
                                 return
                             }
-                            self.audioURL = url
-                            self.isLoading = false
+                            self.audioURLs = urls
                             self.isMediaPlayerActive = true
-                            saveEntry(text: inputText, url: url)
+                            saveEntry(text: inputText, urls: urls)
                             self.items.append(inputText)
                             UserDefaults.standard.set(self.items, forKey: "savedItems")
                         }
@@ -82,8 +82,8 @@ struct NewEntryView: View {
 
                 Spacer()
 
-                if let audioURL = audioURL {
-                    NavigationLink(destination: MediaPlayerView(inputText: inputText, audioURLs: [audioURL]), isActive: $isMediaPlayerActive) {
+                if !audioURLs.isEmpty {
+                    NavigationLink(destination: MediaPlayerView(inputText: inputText, audioURLs: audioURLs), isActive: $isMediaPlayerActive) {
                         EmptyView()
                     }
                 }

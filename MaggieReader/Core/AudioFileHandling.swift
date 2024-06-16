@@ -8,9 +8,9 @@
 import AVFoundation
 import Foundation
 
-func saveEntry(text: String, url: URL) {
-    let fileName = url.lastPathComponent
-    if let data = try? JSONEncoder().encode([fileName]) {
+func saveEntry(text: String, urls: [URL]) {
+    let fileNames = urls.map { $0.lastPathComponent }
+    if let data = try? JSONEncoder().encode(fileNames) {
         UserDefaults.standard.set(data, forKey: text)
     }
 }

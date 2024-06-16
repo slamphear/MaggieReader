@@ -10,7 +10,7 @@ import AVFoundation
 import Combine
 import OpenAI
 
-func convertTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, completion: @escaping (URL?) -> Void) {
+func convertTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, completion: @escaping ([URL]) -> Void) {
     print("Starting convertTextToSpeech")
     let chunks = chunkText(text, chunkSize: 4096)
     print("Text split into \(chunks.count) chunks")
@@ -23,14 +23,12 @@ func convertTextToSpeech(text: String, voice: AudioSpeechQuery.AudioSpeechVoice,
 
     Publishers.MergeMany(chunkProcessingPublishers)
         .collect()
-        .flatMap { indexedURLs -> AnyPublisher<URL?, Never> in
-            let sortedURLs = indexedURLs.sorted(by: { $0.0 < $1.0 }).compactMap { $0.1 }
-            return joinAudioFiles(urls: sortedURLs)
-                .eraseToAnyPublisher()
+        .map { indexedURLs in
+            indexedURLs.sorted(by: { $0.0 < $1.0 }).compactMap { $0.1 }
         }
-        .sink { finalURL in
-            print("Completed with final URL: \(String(describing: finalURL))")
-            completion(finalURL)
+        .sink { sortedURLs in
+            print("Completed with URLs: \(sortedURLs)")
+            completion(sortedURLs)
         }
         .store(in: &cancellables)
 }
@@ -60,7 +58,8 @@ func textToSpeechAPI(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, com
     openAI.audioCreateSpeech(query: query) { result in
         switch result {
         case .success(let audio):
-            let tempAACURL = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("aac")
+            let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+            let tempAACURL = documentsDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("aac")
             do {
                 print("Audio data size: \(audio.audio.count) bytes")
                 try audio.audio.write(to: tempAACURL)
@@ -89,58 +88,6 @@ func textToSpeechAPI(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, com
             completion(nil)
         }
     }
-}
-
-func joinAudioFiles(urls: [URL]) -> AnyPublisher<URL?, Never> {
-    return Future<URL?, Never> { promise in
-        print("Joining audio files")
-        let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let outputURL = documentDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("m4a")
-
-        let composition = AVMutableComposition()
-        let loadAssetPublisher = urls.publisher.flatMap { url -> AnyPublisher<(AVAsset, [AVAssetTrack], CMTime), Error> in
-            let asset = AVURLAsset(url: url)
-            let tracksPublisher = asset.loadTracksPublisher(withMediaType: .audio)
-            let durationPublisher = asset.loadDurationPublisher()
-
-            return Publishers.Zip3(Just(asset).setFailureType(to: Error.self), tracksPublisher, durationPublisher)
-                .eraseToAnyPublisher()
-        }
-
-        loadAssetPublisher
-            .collect()
-            .sink(receiveCompletion: { completion in
-                print("Finished loading assets with completion: \(completion)")
-                if case let .failure(error) = completion {
-                    print("Failed with error: \(error)")
-                    promise(.success(nil))
-                }
-            }, receiveValue: { assetTracksAndDurations in
-                print("Received asset tracks and durations")
-                for (asset, tracks, duration) in assetTracksAndDurations {
-                    if let assetTrack = tracks.first {
-                        let compositionTrack = composition.addMutableTrack(withMediaType: .audio, preferredTrackID: kCMPersistentTrackID_Invalid)
-                        try? compositionTrack?.insertTimeRange(CMTimeRangeMake(start: .zero, duration: duration), of: assetTrack, at: composition.duration)
-                    }
-                }
-
-                let exporter = AVAssetExportSession(asset: composition, presetName: AVAssetExportPresetAppleM4A)!
-                exporter.outputFileType = .m4a
-                exporter.outputURL = outputURL
-
-                exporter.exportAsynchronously {
-                    switch exporter.status {
-                    case .completed:
-                        print("Export completed: \(outputURL)")
-                        promise(.success(outputURL))
-                    default:
-                        print("Export failed with status: \(exporter.status)")
-                        promise(.success(nil))
-                    }
-                }
-            })
-            .store(in: &cancellables)
-    }.eraseToAnyPublisher()
 }
 
 extension AVAsset {
@@ -173,17 +120,6 @@ extension AVAsset {
                 }
             }
         }.eraseToAnyPublisher()
-    }
-}
-
-// Debugging function to inspect file headers
-func printFileHeader(at url: URL) {
-    do {
-        let data = try Data(contentsOf: url)
-        let header = data.prefix(32) // Read the first 32 bytes
-        print("File header: \(header.map { String(format: "%02x", $0) }.joined(separator: " "))")
-    } catch {
-        print("Failed to read file header: \(error)")
     }
 }
 
