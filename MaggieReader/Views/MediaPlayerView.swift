@@ -19,49 +19,78 @@ struct MediaPlayerView: View {
     @State private var totalDuration: CMTime = .zero
     @State private var chunkDurations: [CMTime] = []
     @State private var timer: Timer?
+    @State private var progress: Double = 0.0
+    @State private var playbackRate: Float = 1.0
 
     var body: some View {
         VStack {
-            Text("Now Playing")
-                .font(.headline)
-                .padding()
-
             ScrollView {
                 Text(inputText)
                     .padding()
             }
-            .frame(height: 200)
 
             HStack {
+                Spacer()
+
                 Button(action: skipBackward) {
-                    Image(systemName: "backward.fill")
+                    Image(systemName: "gobackward.30")
+                        .scaleEffect(1.5)
                 }
                 .padding()
+
+                Spacer()
 
                 Button(action: togglePlayPause) {
                     Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+                        .scaleEffect(1.5)
                 }
                 .padding()
+
+                Spacer()
 
                 Button(action: skipForward) {
-                    Image(systemName: "forward.fill")
+                    Image(systemName: "goforward.30")
+                        .scaleEffect(1.5)
                 }
                 .padding()
+
+                Spacer()
             }
 
-            ProgressView(value: progressValue)
-                .padding()
-                .onAppear {
-                    setupPlayer()
-                    setupRemoteTransportControls()
-                    setupNowPlaying()
-                    startTimer()
+            Picker("Playback Rate", selection: $playbackRate) {
+                Text("0.5x").tag(Float(0.5))
+                Text("1x").tag(Float(1.0))
+                Text("1.5x").tag(Float(1.5))
+                Text("2x").tag(Float(2.0))
+            }
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+            .onChange(of: playbackRate) { newRate in
+                player.rate = newRate
+                if isPlaying {
+                    player.playImmediately(atRate: newRate)
                 }
-                .onDisappear {
-                    player.pause()
-                    updateNowPlaying(isPlaying: false)
-                    stopTimer()
-                }
+            }
+
+            HStack {
+                Text(formatTime(currentPlayerTime()))
+                ProgressView(value: progress)
+                    .padding()
+                Text("-\(formatTime(CMTimeSubtract(totalDuration, currentPlayerTime())))")
+            }
+            .padding()
+
+        }
+        .onAppear {
+            setupPlayer()
+            setupRemoteTransportControls()
+            setupNowPlaying()
+            startTimer()
+        }
+        .onDisappear {
+            player.pause()
+            updateNowPlaying(isPlaying: false)
+            stopTimer()
         }
     }
 
@@ -105,6 +134,7 @@ struct MediaPlayerView: View {
             self.totalDuration = self.chunkDurations.reduce(.zero, +)
             self.player.actionAtItemEnd = .advance
             NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: nil, queue: .main) { _ in
+                print("AVPlayerItemDidPlayToEndTime triggered at duration \(self.currentPlayerTime().seconds) seconds out of a total \(self.totalDuration.seconds) seconds")
                 if self.currentItemIndex < self.audioURLs.count - 1 {
                     self.currentItemIndex += 1
                 } else {
@@ -113,7 +143,7 @@ struct MediaPlayerView: View {
                     self.stopTimer()
                 }
             }
-            self.player.play()
+            self.player.playImmediately(atRate: self.playbackRate)
             self.isPlaying = true
             self.updateNowPlaying(isPlaying: true)
         }
@@ -124,7 +154,7 @@ struct MediaPlayerView: View {
         if isPlaying {
             player.pause()
         } else {
-            player.play()
+            player.playImmediately(atRate: playbackRate)
         }
         isPlaying.toggle()
         updateNowPlaying(isPlaying: isPlaying)
@@ -168,7 +198,7 @@ struct MediaPlayerView: View {
                 player.seek(to: seekTimeInChunk) { _ in
                     self.updateNowPlaying(isPlaying: self.isPlaying)
                     if self.isPlaying {
-                        self.player.play()
+                        self.player.playImmediately(atRate: self.playbackRate)
                     }
                 }
                 return
@@ -178,7 +208,6 @@ struct MediaPlayerView: View {
     }
 
     func currentPlayerTime() -> CMTime {
-        guard let currentItem = player.currentItem else { return .zero }
         let currentTime = player.currentTime()
         let elapsedTime = chunkDurations.prefix(currentItemIndex).reduce(0.0) { $0 + CMTimeGetSeconds($1) }
         print("currentPlayerTime called, elapsedTime: \(elapsedTime), currentTime: \(currentTime.seconds)")
@@ -190,7 +219,7 @@ struct MediaPlayerView: View {
 
         commandCenter.playCommand.addTarget { event in
             if !self.isPlaying {
-                self.player.play()
+                self.player.playImmediately(atRate: self.playbackRate)
                 self.isPlaying = true
                 self.updateNowPlaying(isPlaying: true)
                 return .success
@@ -233,7 +262,7 @@ struct MediaPlayerView: View {
     func setupNowPlaying() {
         var nowPlayingInfo = [String: Any]()
         nowPlayingInfo[MPMediaItemPropertyTitle] = "Maggie Reader"
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = 1.0
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = CMTimeGetSeconds(self.totalDuration)
 
         // Add App Icon as artwork
@@ -254,10 +283,11 @@ struct MediaPlayerView: View {
         let currentPlayerSeconds = CMTimeGetSeconds(currentPlayerTime())
         let totalDurationSeconds = CMTimeGetSeconds(self.totalDuration)
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = currentPlayerSeconds
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? 1.0 : 0.0
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = isPlaying ? playbackRate : 0.0
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = totalDurationSeconds
 
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        progress = progressValue
     }
 
     func startTimer() {
@@ -269,5 +299,24 @@ struct MediaPlayerView: View {
     func stopTimer() {
         timer?.invalidate()
         timer = nil
+    }
+
+    private func formatTime(_ time: CMTime) -> String {
+        print("Calling formatTime with time \(time.seconds) seconds")
+        let totalSeconds: Float64
+        if !time.isValid {
+            totalSeconds = 0.0
+        } else {
+            totalSeconds = CMTimeGetSeconds(time)
+        }
+        let hours = Int(totalSeconds) / 3600
+        let minutes = (Int(totalSeconds) % 3600) / 60
+        let seconds = Int(totalSeconds) % 60
+
+        if hours > 0 {
+            return String(format: "%d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%02d:%02d", minutes, seconds)
+        }
     }
 }
