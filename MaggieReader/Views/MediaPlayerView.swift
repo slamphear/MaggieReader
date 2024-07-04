@@ -102,7 +102,7 @@ struct MediaPlayerView: View {
                             Text("2.0").tag(Float(2.0))
                         }
                         .pickerStyle(SegmentedPickerStyle())
-                        .onChange(of: playbackRate) { _ in
+                        .onChange(of: playbackRate) {
                             updatePlaybackRate()
                         }
                     }
@@ -155,20 +155,11 @@ struct MediaPlayerView: View {
             let item = AVPlayerItem(url: url)
             player.insert(item, after: nil)
 
-            item.asset.loadValuesAsynchronously(forKeys: ["duration"]) {
-                var error: NSError?
-                let status = item.asset.statusOfValue(forKey: "duration", error: &error)
-                if status == .loaded {
-                    let duration = item.asset.duration
-                    DispatchQueue.main.async {
-                        self.chunkDurations.append(duration)
-                        group.leave()
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.chunkDurations.append(.zero)
-                        group.leave()
-                    }
+            Task {
+                let duration = try await item.asset.load(.duration)
+                DispatchQueue.main.async {
+                    self.chunkDurations.append(duration)
+                    group.leave()
                 }
             }
         }
