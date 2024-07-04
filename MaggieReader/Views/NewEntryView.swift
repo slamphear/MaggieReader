@@ -18,7 +18,7 @@ struct NewEntryView: View {
     @State private var audioURLs: [URL] = []
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 TextEditor(text: $inputText)
                     .border(Color.gray, width: 1)
@@ -55,12 +55,6 @@ struct NewEntryView: View {
                     #if canImport(UIKit)
                     UIApplication.shared.endEditing(true)
                     #endif
-                    isLoading = true
-                    guard let openAI = getOpenAIClient() else {
-                        print("API Token not found")
-                        isLoading = false
-                        return
-                    }
                     convertTextToSpeech(text: inputText, voice: selectedVoice) { urls in
                         DispatchQueue.main.async {
                             self.isLoading = false
@@ -79,15 +73,13 @@ struct NewEntryView: View {
                     Text("Convert to Speech")
                 }
                 .padding()
-
-                Spacer()
-
-                if !audioURLs.isEmpty {
-                    NavigationLink(destination: MediaPlayerView(inputText: inputText, audioURLs: audioURLs), isActive: $isMediaPlayerActive) {
-                        EmptyView()
-                    }
-                }
             }
+            .navigationDestination(
+                isPresented: $isMediaPlayerActive,
+                destination: {
+                    MediaPlayerView(inputText: inputText, audioURLs: audioURLs)
+                }
+            )
             .navigationTitle("New Entry")
             #if canImport(UIKit)
             .navigationBarItems(trailing: Button(action: {
