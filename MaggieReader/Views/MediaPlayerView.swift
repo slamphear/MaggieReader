@@ -57,21 +57,6 @@ struct MediaPlayerView: View {
                 Spacer()
             }
 
-            Picker("Playback Rate", selection: $playbackRate) {
-                Text("0.5x").tag(Float(0.5))
-                Text("1x").tag(Float(1.0))
-                Text("1.5x").tag(Float(1.5))
-                Text("2x").tag(Float(2.0))
-            }
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-            .onChange(of: playbackRate) { newRate in
-                player.rate = newRate
-                if isPlaying {
-                    player.playImmediately(atRate: newRate)
-                }
-            }
-
             HStack {
                 Text(formatTime(currentPlayerTime()))
                 ProgressView(value: progress)
@@ -80,6 +65,57 @@ struct MediaPlayerView: View {
             }
             .padding()
 
+            DisclosureGroup(
+                content: {
+                    VStack(spacing: 4) {
+                        Slider(
+                            value: self.$playbackRate,
+                            in: 0.5...3.5,
+                            step: 0.05,
+                            label: { Text("Playback Speed") },
+                            minimumValueLabel: {
+                                Button(action: {
+                                    self.playbackRate -= 0.05
+                                    updatePlaybackRate()
+                                }, label: {
+                                    Image(systemName: "minus")
+                                })
+                            },
+                            maximumValueLabel: {
+                                Button(action: {
+                                    self.playbackRate += 0.05
+                                    updatePlaybackRate()
+                                }, label: {
+                                    Image(systemName: "plus")
+                                })
+                            }
+                        ) { _ in
+                            updatePlaybackRate()
+                        }
+
+                        Picker("Playback Rate", selection: $playbackRate) {
+                            Text("0.7").tag(Float(0.7))
+                            Text("1.0").tag(Float(1.0))
+                            Text("1.2").tag(Float(1.2))
+                            Text("1.5").tag(Float(1.5))
+                            Text("1.7").tag(Float(1.7))
+                            Text("2.0").tag(Float(2.0))
+                        }
+                        .pickerStyle(SegmentedPickerStyle())
+                        .onChange(of: playbackRate) { _ in
+                            updatePlaybackRate()
+                        }
+                    }
+                },
+                label: {
+                    HStack {
+                        Text("Playback speed")
+                        Spacer()
+                        Text("\(String(format: "%.2f", self.playbackRate))x")
+                    }
+                }
+            )
+            .padding()
         }
         .onAppear {
             setupPlayer()
@@ -98,6 +134,13 @@ struct MediaPlayerView: View {
         let currentTimeSeconds = CMTimeGetSeconds(currentPlayerTime())
         let totalDurationSeconds = CMTimeGetSeconds(totalDuration)
         return totalDurationSeconds > 0 ? currentTimeSeconds / totalDurationSeconds : 0
+    }
+
+    private func updatePlaybackRate() {
+        player.rate = self.playbackRate
+        if isPlaying {
+            player.playImmediately(atRate: self.playbackRate)
+        }
     }
 
     @MainActor
