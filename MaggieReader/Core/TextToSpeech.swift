@@ -59,26 +59,12 @@ func textToSpeechAPI(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, com
         switch result {
         case .success(let audio):
             let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-            let tempAACURL = documentsDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("aac")
+            let audioFileURL = documentsDirectory.appendingPathComponent(UUID().uuidString).appendingPathExtension("aac")
             do {
                 print("Audio data size: \(audio.audio.count) bytes")
-                try audio.audio.write(to: tempAACURL)
-                print("Audio written to \(tempAACURL)")
-
-                // Verify if the file can be opened as an AVAsset
-                let asset = AVURLAsset(url: tempAACURL)
-                asset.loadValuesAsynchronously(forKeys: ["tracks", "duration"]) {
-                    var error: NSError?
-                    let tracksStatus = asset.statusOfValue(forKey: "tracks", error: &error)
-                    let durationStatus = asset.statusOfValue(forKey: "duration", error: &error)
-                    if tracksStatus == .loaded && durationStatus == .loaded {
-                        print("Successfully verified audio file at \(tempAACURL)")
-                        completion(tempAACURL)
-                    } else {
-                        print("Failed to verify audio file at \(tempAACURL): \(String(describing: error))")
-                        completion(nil)
-                    }
-                }
+                try audio.audio.write(to: audioFileURL)
+                print("Audio written to \(audioFileURL)")
+                completion(audioFileURL)
             } catch {
                 print("Error writing audio: \(error)")
                 completion(nil)
@@ -87,39 +73,6 @@ func textToSpeechAPI(text: String, voice: AudioSpeechQuery.AudioSpeechVoice, com
             print("API call failed with error: \(error)")
             completion(nil)
         }
-    }
-}
-
-extension AVAsset {
-    func loadTracksPublisher(withMediaType mediaType: AVMediaType) -> AnyPublisher<[AVAssetTrack], Error> {
-        return Future<[AVAssetTrack], Error> { promise in
-            print("Loading tracks for media type: \(mediaType)")
-            self.loadTracks(withMediaType: mediaType) { tracks, error in
-                if let tracks = tracks {
-                    print("Loaded tracks: \(tracks.count)")
-                    promise(.success(tracks))
-                } else if let error = error {
-                    print("Error loading tracks: \(error)")
-                    promise(.failure(error))
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-
-    func loadDurationPublisher() -> AnyPublisher<CMTime, Error> {
-        return Future<CMTime, Error> { promise in
-            print("Loading duration")
-            Task {
-                do {
-                    let duration: CMTime = try await self.load(.duration)
-                    print("Loaded duration: \(duration)")
-                    promise(.success(duration))
-                } catch {
-                    print("Error loading duration: \(error)")
-                    promise(.failure(error))
-                }
-            }
-        }.eraseToAnyPublisher()
     }
 }
 
